@@ -33,6 +33,7 @@ export const App: React.FC = () => {
     loading,
     handlToggleTodo,
     handlToggleAll,
+    handleUpdateTodo,
   } = useTodosManager();
 
   if (!USER_ID) {
@@ -66,6 +67,7 @@ export const App: React.FC = () => {
           onDelete={handlDeleteTodo}
           tempTodo={tempTodo}
           onToggle={handlToggleTodo}
+          onUpdate={handleUpdateTodo}
         />
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">

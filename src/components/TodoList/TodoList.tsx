@@ -8,7 +8,7 @@ type Props = {
   tempTodo: Todo | null;
   loadingIds: number[];
   onToggle: (id: number) => void;
-  onUpdate: (id: number, title: string) => void;
+  onUpdate: (todo: Todo) => Promise<boolean>;
 };
 
 export const TodoList: React.FC<Props> = ({
@@ -40,7 +40,7 @@ export const TodoList: React.FC<Props> = ({
           isLoading={true}
           isTemporary={true}
           onToggle={() => {}}
-          onUpdate={() => {}}
+          onUpdate={() => Promise.resolve(true)}
         />
       )}
     </section>

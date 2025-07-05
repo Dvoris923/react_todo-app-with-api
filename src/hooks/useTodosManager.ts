@@ -152,27 +152,26 @@ export const useTodosManager = () => {
       });
   };
 
-  const handleUpdateTodo = (todoId: number, newTitle: string) => {
-    const todoToUpdate = todos.find(todo => todo.id === todoId);
+  const handleUpdateTodo = async (todoToUpdate: Todo): Promise<boolean> => {
+    setLoadingId(prev => [...prev, todoToUpdate.id]);
 
-    if (!todoToUpdate) {
-      return;
+    try {
+      const updatedTodo = await updateTodo(todoToUpdate);
+
+      setTodos(prevTodos =>
+        prevTodos.map(todo =>
+          todo.id === updatedTodo.id ? updatedTodo : todo,
+        ),
+      );
+
+      return true;
+    } catch (error) {
+      setErrorMessage(ErrorMessages.UPDATE_TODO);
+
+      return false;
+    } finally {
+      setLoadingId(prev => prev.filter(todoId => todoId !== todoToUpdate.id));
     }
-
-    setLoadingId(prev => [...prev, todoId]);
-
-    updateTodo({ ...todoToUpdate, title: newTitle })
-      .then(updatedTodo => {
-        setTodos(prev =>
-          prev.map(todo => (todo.id === todoId ? updatedTodo : todo)),
-        );
-      })
-      .catch(() => {
-        setErrorMessage(ErrorMessages.UPDATE_TODO);
-      })
-      .finally(() => {
-        setLoadingId(prev => prev.filter(id => id !== todoId));
-      });
   };
 
   const handleClearCompleted = () => {
